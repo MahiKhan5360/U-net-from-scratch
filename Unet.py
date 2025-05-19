@@ -21,3 +21,24 @@ def decoder_block(inputs, skip_features, num_filters):
 
 def build_unet(input_shape, num_classes):
     
+inputs = layers.Input(input_shape)
+
+    # Encoder
+    s1, p1 = encoder_block(inputs, 64)
+    s2, p2 = encoder_block(p1, 128)
+    s3, p3 = encoder_block(p2, 256)
+    s4, p4 = encoder_block(p3, 512)
+
+    # Bottleneck
+    b1 = conv_block(p4, 1024)
+
+    # Decoder
+    d1 = decoder_block(b1, s4, 512)
+    d2 = decoder_block(d1, s3, 256)
+    d3 = decoder_block(d2, s2, 128)
+    d4 = decoder_block(d3, s1, 64)
+
+    # Output
+    outputs = layers.Conv2D(num_classes, 1, padding='same', activation='softmax')(d4)
+
+    
