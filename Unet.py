@@ -41,4 +41,5 @@ inputs = layers.Input(input_shape)
     # Output
     outputs = layers.Conv2D(num_classes, 1, padding='same', activation='softmax')(d4)
 
-    
+    model = Model(inputs, outputs, name="U-Net")
+    return model
